@@ -1,11 +1,9 @@
 setTimeout(() => {
   let definition = document.getElementById('content');
 
-  function getData(url) {
-    return fetch(url).then(response => response.json());
-  }
-
-  getData('/dictionary-api').then(data => {
+  async function getData(url) {
+    let response = await fetch(url);
+    let data = await response.json();
     data.forEach(def => {
       let dt = document.createElement('dt');
       dt.innerHTML = def.term;
@@ -16,5 +14,8 @@ setTimeout(() => {
       dl.appendChild(dd);
       definition.appendChild(dl);
     });
-  });
+    return data;
+  }
+
+  getData('/dictionary-api');
 }, 0);
