@@ -1,4 +1,8 @@
 let button = document.querySelector('button');
+let element = document.getElementById('content');
+let term = document.body.querySelector('input[name="term"]');
+let defined = document.body.querySelector('input[name="defined"]');
+
 button.onclick = e => {
   e.preventDefault();
   let req = new XMLHttpRequest();
@@ -6,6 +10,8 @@ button.onclick = e => {
     if (req.readyState === 4) {
       if (req.status === 200) {
         renderDictionary(JSON.parse(req.response));
+        term.value = '';
+        defined.value = '';
       }
     }
   };
@@ -14,9 +20,8 @@ button.onclick = e => {
     'content-type',
     'application/x-www-form-urlencoded;charset=UTF-8'
   );
-  let term = document.body.querySelector('input').value;
-  let defined = document.body.querySelectorAll('input')[1].value;
-  req.send(`term=${term}&defined=${defined}`);
+
+  req.send(`term=${term.value}&defined=${defined.value}`);
 };
 
 async function getData() {
@@ -30,20 +35,9 @@ getData().then(data => {
 });
 
 function renderDictionary(data) {
-  let element = document.getElementById('content');
-  let fragment = new DocumentFragment();
+  let html = '';
   data.forEach(def => {
-    let dt = document.createElement('dt');
-    dt.innerHTML = def.term;
-    let dd = document.createElement('dd');
-    dd.innerHTML = def.defined;
-    let dl = document.createElement('dl');
-    dl.append(dt);
-    dl.append(dd);
-    fragment.append(dl);
+    html += `<dl><dt>${def.term}</dt><dd>${def.defined}</dd></dl>`;
   });
-  element.textContent = '';
-  element.append(fragment);
-  document.body.querySelector('input').value = '';
-  document.body.querySelectorAll('input')[1].value = '';
+  element.innerHTML = html;
 }
