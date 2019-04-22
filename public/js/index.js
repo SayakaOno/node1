@@ -5,9 +5,7 @@ button.onclick = e => {
   req.onreadystatechange = function() {
     if (req.readyState === 4) {
       if (req.status === 200) {
-        getData().then(data => {
-          renderDictionary(data);
-        });
+        renderDictionary(JSON.parse(req.response));
       }
     }
   };
