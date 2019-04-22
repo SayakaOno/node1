@@ -16,7 +16,9 @@ button.onclick = e => {
     'content-type',
     'application/x-www-form-urlencoded;charset=UTF-8'
   );
-  req.send('term=test&defined=sending');
+  let term = document.body.querySelector('input').value;
+  let defined = document.body.querySelectorAll('input')[1].value;
+  req.send(`term=${term}&defined=${defined}`);
 };
 
 async function getData() {
@@ -44,4 +46,6 @@ function renderDictionary(data) {
   });
   element.textContent = '';
   element.append(fragment);
+  document.body.querySelector('input').value = '';
+  document.body.querySelectorAll('input')[1].value = '';
 }
